@@ -22,6 +22,7 @@ public class Client {
         jFrame.getContentPane().add(BorderLayout.SOUTH, output);
         jFrame.setSize(500, 500);
         jFrame.setVisible(true);
+        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
     static class computeButtonAl implements ActionListener{
 
@@ -29,10 +30,14 @@ public class Client {
         public void actionPerformed(ActionEvent e) {
             try {
                 Socket socket = new Socket("127.0.0.1", 5000);
-
                 PrintWriter wr = new PrintWriter(socket.getOutputStream());
                 wr.println(input.getText());
                 wr.flush();
+                System.out.println("Client> sent request to server: " + input.getText());
+                BufferedReader bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String res = bf.readLine();
+                System.out.println("Client> Server response: " + res);
+                output.setText(res);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
