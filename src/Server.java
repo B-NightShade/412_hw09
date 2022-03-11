@@ -18,10 +18,16 @@ public class Server {
                 String msg = bufferedReader.readLine();
                 System.out.println("Server> data from client " + msg);
                 String msgA[] = msg.trim().split(" ");
-                String op = msgA[1];
+                boolean valid = true;
+                String op = "";
+                try {
+                    op = msgA[1];
+                }
+                catch(ArrayIndexOutOfBoundsException j){
+                    valid = false;
+                }
                 double x = 0;
                 double y = 0;
-                boolean valid = true;
                 try {
                     x = Double.parseDouble(msgA[0]);
                     y = Double.parseDouble(msgA[2]);
@@ -47,7 +53,7 @@ public class Server {
                     result = Math.pow(x,y);
                 }
                 else if(op.equals("%")){
-                    result = Math.pow(x,y);
+                    result = x % y;
                 }
                 else{
                     valid = false;
@@ -56,6 +62,7 @@ public class Server {
                 if (valid) {
                     serWriter.println(result);
                     serWriter.flush();
+                    System.out.println("Server> sent data: "+ result);
                 }
                 else{
                     serWriter.println("ERROR: invalid input");
